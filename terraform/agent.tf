@@ -154,7 +154,7 @@ resource "databricks_notebook" "create_agent" {
 # MAGIC # GEEC Knowledge Assistant Agent
 # MAGIC Creates a RAG-based knowledge assistant for the GEEC procurement system.
 # MAGIC
-# MAGIC ## Purpose (from Proposito de la GEEC)
+# MAGIC ## Purpose (from Proposito_contract_assistant.md)
 # MAGIC The GEEC (Gestor d'Expedients Electrònics de Contractació) is the corporate tool
 # MAGIC for electronically processing and managing all public procurement files of the
 # MAGIC Generalitat de Catalunya. This agent helps users navigate GEEC documentation,

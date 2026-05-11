@@ -1,6 +1,6 @@
-# GEEC Assistant
+# Contract Assistant
 
-A conversational assistant for the **Gestor Electronic d'Expedients de Contractacio (GEEC)** — the electronic procurement management system of the Generalitat de Catalunya. Users can ask questions about GEEC procedures, regulations, and workflows in Catalan or Spanish, and get answers grounded in official documentation with inline citations.
+A conversational **contract assistant** for the **Gestor Electronic d'Expedients de Contractacio** — the electronic procurement management system of the Generalitat de Catalunya. Users can ask questions about public contracting procedures, regulations, and workflows in Catalan or Spanish, and get answers grounded in official documentation with inline citations.
 
 Built as a full-stack [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) using the [`apx`](https://github.com/databricks-solutions/apx) framework, with infrastructure managed by Terraform.
 
@@ -59,7 +59,7 @@ Built as a full-stack [Databricks App](https://docs.databricks.com/en/dev-tools/
 |-----------|-----------|---------|
 | **Frontend** | React 19, TanStack Router/Query, shadcn/ui | Chat UI with sidebar, document viewer panel, citation tooltips |
 | **Backend** | FastAPI, Uvicorn (2 workers) | API routes, KA proxy, document proxy, feedback |
-| **Knowledge Assistant** | Databricks KA (Claude Sonnet + Vector Search) | RAG-based Q&A over GEEC documentation |
+| **Knowledge Assistant** | Databricks KA (Claude Sonnet + Vector Search) | RAG-based Q&A over indexed contracting documentation |
 | **Vector Search** | Databricks Vector Search (gte-large-en) | Semantic search over document chunks |
 | **Chat Memory** | Lakebase (PostgreSQL) | Conversation history with citation metadata (JSONB) |
 | **Observability** | MLflow | Request tracing, user feedback collection |
@@ -144,7 +144,7 @@ terraform init
 terraform apply
 ```
 
-Creates / reconciles: UC schema, document volume + PDFs, vector search endpoint & index, Lakebase Postgres project + database, Agent Bricks Knowledge Assistant (display name `GEEC Contract Assistant`) with a `files` knowledge source pointing at the UC volume, and the code-based RAG agent notebooks & job.
+Creates / reconciles: UC schema, document volume + PDFs, vector search endpoint & index, Lakebase Postgres project + database, Agent Bricks Knowledge Assistant (display name `Contract Assistant` — set `ka_display_name` in `terraform/variables.tf` to match) with a `files` knowledge source pointing at the UC volume, and the code-based RAG agent notebooks & job.
 
 ### 3. Install app dependencies
 
@@ -162,7 +162,7 @@ From the repo root:
 make render-env
 ```
 
-This writes `app/.env` with every `GEEC_ASSISTANT_*` variable sourced from the live Terraform state (KA endpoint name, MLflow experiment path, Lakebase host, etc.). Anything you add below the `# --- local overrides ---` marker is preserved across re-runs.
+This writes `app/.env` with application environment variables sourced from the live Terraform state (KA endpoint name, MLflow experiment path, Lakebase host, etc.). Anything you add below the `# --- local overrides ---` marker is preserved across re-runs.
 
 ### 5. Start the dev server
 
@@ -259,13 +259,13 @@ Defaults from `terraform/variables.tf`; override per workspace with `-var=...` o
 
 | Resource | Default name | Description |
 |----------|------|-------------|
-| UC Schema | `<catalog>.asistente` | Schema for all GEEC assets (catalog from `var.catalog_name`) |
+| UC Schema | `<catalog>.asistente` | Schema for all contract assistant assets (catalog from `var.catalog_name`) |
 | UC Volume | `doc` | Managed volume holding source PDFs |
 | Delta Table | `doc_chunks` | Document chunks with text content |
 | Vector Search Endpoint | `geec_vs_endpoint` | Hosts the vector search index |
 | Vector Search Index | `doc_chunks_index` | Semantic search over chunks (gte-large-en) |
 | Lakebase Project | `geec-chat-memory` | Autoscaling Postgres project |
 | Lakebase Database | `chat` | Postgres database for chat memory |
-| Databricks Job | `GEEC Knowledge Assistant - Setup` | Parses documents and deploys the code-based RAG agent |
-| Agent Bricks KA | `GEEC Contract Assistant` | Reconciled by `scripts/ka-sync.sh` via an `external` data source |
-| Knowledge Source | `GEEC Docs Volume` (type `files`) | Points at the UC volume so the KA auto-ingests the PDFs |
+| Databricks Job | See `terraform/agent.tf` (`databricks_job`) | Parses documents and deploys the code-based RAG agent |
+| Agent Bricks KA | `var.ka_display_name` | Reconciled by `scripts/ka-sync.sh` via an `external` data source |
+| Knowledge Source | `var.ka_source_display_name` (type `files`) | Points at the UC volume so the KA auto-ingests the PDFs |
