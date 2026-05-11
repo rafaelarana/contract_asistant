@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Claude Code
+.claude/
+
+# Terraform
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfstate.*.backup
+*.tfvars
+
+# Local MLflow sqlite (used only when lakebase is offline)
+app/mlflow.db
+
+# Backup folders
+app_dash_backup/
+
+# Generated from templates at deploy time (edit *.tpl / scripts instead)
+app/databricks.yml
+app/.env
+app/.build/

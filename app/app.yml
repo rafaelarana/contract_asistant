@@ -1,0 +1,1 @@
+command: ["uvicorn", "geec_assistant.backend.app:app", "--workers", "2"]

@@ -1,0 +1,21 @@
+# Placeholders (${VAR}) are resolved at deploy time by `make deploy` using
+# `terraform output`. Do not hardcode values here. See the project README for
+# details. For local dev, set the corresponding GEEC_ASSISTANT_* variables in
+# app/.env instead.
+command: ["uvicorn", "geec_assistant.backend.app:app", "--workers", "2"]
+
+env:
+  - name: GEEC_ASSISTANT_KA_ENDPOINT
+    value: ${KA_ENDPOINT_NAME}
+  - name: GEEC_ASSISTANT_LAKEBASE_HOST
+    value: ${LAKEBASE_HOST}
+  - name: GEEC_ASSISTANT_LAKEBASE_DATABASE
+    value: ${LAKEBASE_DATABASE_NAME}
+  - name: GEEC_ASSISTANT_LAKEBASE_ENDPOINT
+    value: ${LAKEBASE_ENDPOINT_PATH}
+  - name: GEEC_ASSISTANT_MLFLOW_EXPERIMENT
+    value: ${MLFLOW_EXPERIMENT_PATH}
+
+# Resource bindings (which grant the app's service principal access to KA,
+# Lakebase, UC volume, etc.) live in databricks.yml under resources.apps.<name>.
+# Apps bundle deployer ignores a top-level `resources:` block here.
