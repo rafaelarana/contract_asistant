@@ -1,6 +1,6 @@
 # Contract Assistant
 
-A conversational **contract assistant** for the **Gestor Electronic d'Expedients de Contractacio** — the electronic procurement management system of the Generalitat de Catalunya. Users can ask questions about public contracting procedures, regulations, and workflows in Catalan or Spanish, and get answers grounded in official documentation with inline citations.
+A conversational **contract assistant** for the **Gestor Electronic d'Expedients de Contractacio** — an electronic procurement management system for public-sector contracting. Users can ask questions about public contracting procedures, regulations, and workflows in Catalan or Spanish, and get answers grounded in official documentation with inline citations.
 
 Built as a full-stack [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) using the [`apx`](https://github.com/databricks-solutions/apx) framework, with infrastructure managed by Terraform.
 
